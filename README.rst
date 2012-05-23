@@ -1,5 +1,3 @@
-Please forgive the poor formatting as GITHUB and I are having disagreements of proper formating of rst text. - Ed
-
 README
 ~~~~~~
 
@@ -37,7 +35,7 @@ Now one can get started by writing tests. There is detailed information with the
 
 ::
 
-    C:\\> mkdir acceptence-tests
+    C:\> mkdir acceptence-tests
 
 Using your prefered editor copy the following into a file called "hello_world.txt" (without qoutes)
 
