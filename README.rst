@@ -19,6 +19,7 @@ Table of Contents
 #. `Page Object Model`_
 #. `Robot Framework`_
 #. `Using buildout and testing Plone core information`_
+#. `Quick links`_
 
 Steps to get started with Plone UI Testing using Robot Framework
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -113,7 +114,7 @@ QUnit is a javascript test suite. See http://docs.jquery.com/Qunit
 Selenium
 ~~~~~~~~
 
-Website: 
+Website: http://code.google.com/p/selenium/
 
 Selenium 1.0 or Selenium was basically a javascript library where as WebDriver/Selenium2 actually controls the browser itself using the JSON Wire Protocal.
 
@@ -154,10 +155,9 @@ An example of using the Page Object method with Robot Framework can be found on 
 
 Plone's robot framework documentation can be found at https://github.com/gotcha/plone-robot-documentation
 
+
 Using buildout and testing Plone core information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 
 Steps to add robotframework and robotframework-selenium2library to buildout. Note these were written using Linux and should be adjusted accordingly to your OS. (Please send me any OS specific differences so I can add them here).
 
@@ -166,6 +166,7 @@ Steps to add robotframework and robotframework-selenium2library to buildout. Not
 1. Add the following to ...
 
 core.cfg
+
 ::
 
     [buildout]
@@ -184,6 +185,7 @@ core.cfg
 
 
 checkouts.cfg 
+
 ::
 
     auto-checkout =
@@ -191,6 +193,7 @@ checkouts.cfg
         robotframework-selenium2library
 
 sources.cfg
+
 ::
 
     [sources]
@@ -227,3 +230,12 @@ These test were placed in directory just below the buildout directory, called ./
 ::
 
     ~/plone42$ ./bin/pybot acceptance-tests/
+
+Quick links
+~~~~~~~~~~~
+
+Keyword Documentation for ...
+
+robotframework-selenium2library http://rtomac.github.com/robotframework-selenium2library/doc/Selenium2Library.html
+
+robotframework  http://code.google.com/p/robotframework/wiki/TestLibraries
