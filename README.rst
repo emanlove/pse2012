@@ -239,3 +239,5 @@ Keyword Documentation for ...
 robotframework-selenium2library http://rtomac.github.com/robotframework-selenium2library/doc/Selenium2Library.html
 
 robotframework  http://code.google.com/p/robotframework/wiki/TestLibraries
+
+Sample test written for Plone (using selenium2library)  https://github.com/emanlove/buildout.coredev/tree/4.1-robot/acceptance-tests
