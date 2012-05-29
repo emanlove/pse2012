@@ -1,7 +1,7 @@
 README
 ~~~~~~
 
-The following are resources, links and other notes relating to my talk given at the Plone East Symposium held at Penn State, May - 2012.
+The following are resources, links and other notes relating to `my talk <http://www.justin.tv/weblionab/b/319303907>`_ given at the Plone East Symposium held at Penn State, May - 2012.
 
 If any information is missing or inaccurate please feel free to correct me.
 
@@ -11,15 +11,43 @@ email: devPyPlTw@verizon.net
 
 #plone irc: t55e
 
+Recorded Talk: http://www.justin.tv/weblionab/b/319303907
+
 Table of Contents
 ~~~~~~~~~~~~~~~~~
-1. `Steps to get started with Plone UI Testing using Robot Framework`_
+1. `Post-symposium follow-up`_
+
+   a) `Selenium RC and Selenium IDE`_
+   b) `Using both Python and Robot Framework`_
+
+2. `Steps to get started with Plone UI Testing using Robot Framework`_
 #. `Plone Testing, Javascript Statistics, QUnit`_
 #. `Selenium`_
 #. `Page Object Model`_
 #. `Robot Framework`_
 #. `Using buildout and testing Plone core information`_
 #. `Quick links`_
+
+Post-symposium follow-up
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+After my symposium talk I had several conversations with different people concerning a couple of topics.  I wanted to share some more information about those topics
+
+Selenium RC and Selenium IDE
+----------------------------
+
+Several people have asked about several other selenium related projects, Selenium RC and Selenium IDE. Selenium RC or Remote Control is essentially Selenium 1 and, `according to the SeleniumHQ FAQ <http://seleniumhq.org/docs/01_introducing_selenium.html#selenium-1-aka-selenium-rc-or-remote-control>`_, is being maintained but not actively developed.  This makes sense as most development is on the newer Selenium 2/WebDriver project.
+
+Selenium IDE is a simplified testing enviroment, for Firefox only, which uses neither Selenium 1 nor Selenium 2/WebDriver but creates test "scripts" which then can be rerun through, and only through, the IDE. Let me quote verbatim from the FAQ ...
+
+    "Even though Selenium IDE has a “Save” feature that allows users to keep the tests in a table-based format for later import and execution, it is not designed to run your test passes nor is it designed to build all the automated tests you will need. Specifically, Selenium IDE doesn’t provide iteration or conditional statements for test scripts. At the time of writing there is no plan to add such thing. The reasons are partly technical and partly based on the Selenium developers encouraging best practices in test automation which always requires some amount of programming. Selenium IDE is simply intended as a rapid prototyping tool. The Selenium developers recommend for serious, robust test automation either Selenium 2 or Selenium 1 to be used with one of the many supported programming languages."
+
+The context in which this was asked involved a large Plone installation with just two main developers, a third part-time developer, some designers with no programming experience and many in-house customers (non-programers, non-designers) who seemed to constantly report unreproducable issues. It was asked if IDE could be used to help reproduce these phantom issues. If the end users are working within the limited system requirements (ie Firefox) such a setup might be useful.  But again it is limited in capabilities and we should be aware of this.
+
+Using both Python and Robot Framework
+-------------------------------------
+
+Again within the context of having an organization with both python programmers and no-python personnal like designers is using python and robot framework an either/or situation.  The answer is you can use both python and robot framework together. As robot framework is written in python, it allows you to create user keywords in python code. So using best practices we can create python page objects and then incorporate them as keywords within the robot framework tests. (Adam Goucher provides `an example <https://github.com/adamgoucher/robotframework-pageobjects>`_ or using python page objects with robot framework on `his github site <https://github.com/adamgoucher/robotframework-pageobjects>`_.) For more information on writing python-based keywords read the `section on variable files <http://robotframework.googlecode.com/hg/doc/userguide/RobotFrameworkUserGuide.html?r=2.7.1#resource-and-variable-files>`_ within the robot framework user's guide.
 
 Steps to get started with Plone UI Testing using Robot Framework
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
