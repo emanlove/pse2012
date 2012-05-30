@@ -26,6 +26,8 @@ Table of Contents
 #. `Page Object Model`_
 #. `Robot Framework`_
 #. `Using buildout and testing Plone core information`_
+#. `Others work with Selenium / Robot Framework / Plone`_
+#. `(Personal) Roadmap for Plone Selenium/Robot Framework Testing`_
 #. `Quick links`_
 
 Post-symposium follow-up
@@ -38,7 +40,7 @@ Selenium RC and Selenium IDE
 
 Several people have asked about several other selenium related projects, Selenium RC and Selenium IDE. Selenium RC or Remote Control is essentially Selenium 1 and, `according to the SeleniumHQ FAQ <http://seleniumhq.org/docs/01_introducing_selenium.html#selenium-1-aka-selenium-rc-or-remote-control>`_, is being maintained but not actively developed.  This makes sense as most development is on the newer Selenium 2/WebDriver project.
 
-Selenium IDE is a simplified testing enviroment, for Firefox only, which uses neither Selenium 1 nor Selenium 2/WebDriver but creates test "scripts" which then can be rerun through, and only through, the IDE. Let me quote verbatim from the FAQ ...
+`Selenium IDE <http://seleniumhq.org/projects/ide/>`_ is a simplified testing enviroment, for Firefox only, which uses neither Selenium 1 nor Selenium 2/WebDriver but creates test "scripts" which then can be rerun through, and only through, the IDE. Let me quote verbatim from the FAQ ...
 
     "Even though Selenium IDE has a “Save” feature that allows users to keep the tests in a table-based format for later import and execution, it is not designed to run your test passes nor is it designed to build all the automated tests you will need. Specifically, Selenium IDE doesn’t provide iteration or conditional statements for test scripts. At the time of writing there is no plan to add such thing. The reasons are partly technical and partly based on the Selenium developers encouraging best practices in test automation which always requires some amount of programming. Selenium IDE is simply intended as a rapid prototyping tool. The Selenium developers recommend for serious, robust test automation either Selenium 2 or Selenium 1 to be used with one of the many supported programming languages."
 
@@ -259,6 +261,42 @@ These test were placed in directory just below the buildout directory, called ./
 
     ~/plone42$ ./bin/pybot acceptance-tests/
 
+Others work with Selenium / Robot Framework / Plone
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+I was not the first nor only person working to test Plone using either selenium or robot framework.  Here is a list of others and some links to their work.
+
+Godefroid Chapelle (gotcha)
+    has been a strong advocate for robotframework and for writing tests for Plone's javascript/UI code.
+    
+    - https://github.com/gotcha/plone-robot-documentation
+
+    - https://github.com/gotcha/robotentrypoints
+
+    - https://github.com/gotcha/plone.act
+
+Asko Soukka (datakurre)
+    has done great exploritory work with robotframework and Plone as well as other robotframework library. Also Asko is looking at wrapping robotframework into unittest
+
+    - https://github.com/datakurre/robotsuite
+
+    - https://github.com/datakurre/corejet.robot
+
+    - https://github.com/datakurre/phantomrobot
+
+Héctor Velarde (hvelarde)
+    has mentioned that he is going to look into multilingual capability for robotframework
+
+    - https://github.com/hvelarde
+
+(Personal) Roadmap for Plone Selenium/Robot Framework Testing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Here is my personal list of To Do's for Plone Selenium/Robot Framework Testing
+
+    To Do: Make List ;)
+
+
 Quick links
 ~~~~~~~~~~~
 
@@ -269,3 +307,5 @@ robotframework-selenium2library http://rtomac.github.com/robotframework-selenium
 robotframework  http://code.google.com/p/robotframework/wiki/TestLibraries
 
 Sample test written for Plone (using selenium2library)  https://github.com/emanlove/buildout.coredev/tree/4.1-robot/acceptance-tests
+
+Recorded Talk: http://www.justin.tv/weblionab/b/319303907
