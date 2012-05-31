@@ -212,7 +212,9 @@ core.cfg
     entry-points = 
         pybot=robot:run_cli
         rebot=robot.rebot:rebot_cli
+    arguments = sys.argv[1:]
 
+The entry_points and arguments attributes are necessary because robotframework does not currently configure its scripts properly under buildout.  Thanks to Héctor Velarde and Mikko Ohtama for the complete solution. Godefroid also has presented an alternative solution `here <https://github.com/gotcha/robotentrypoints>`_.
 
 checkouts.cfg 
 
@@ -238,24 +240,16 @@ Note I am currently pulling in robotframework-selenium2library from my github re
     
     ~/plone42$ ./bin/buildout
 
-3. In the buildout bin directory edit the script 'pybot'
 
-::
+3. ~~In the buildout bin directory edit the script 'pybot'~~
 
-    ...
-    
-    import robot
-    
-    if __name__ == '__main__':
-        robot.run_cli(sys.argv[1:])
+~~This is necessary because robotframework does not currently configure its scripts properly under buildout.  This is partially fixed by the entry_points attribute in core.cfg above.  By the script requires an argument (sys.argv[1:]) which is not allowed by entry_points or buildout.  So this poor workaround is required. Godefroid also has presented an alternative solution `here <https://github.com/gotcha/robotentrypoints>`_.~~
 
-This is neccessary because robotframework does not currently configure its scripts properly under buildout.  This is partially fixed by the entry_points attribute in core.cfg above.  By the script requires an argument (sys.argv[1:]) which is not allowed by entry_points or buildout.  So this poor workaround is required. Godefroid also has presented an alternative solution `here <https://github.com/gotcha/robotentrypoints>`_.
-
-4. Create tests. Or better yet start of by copying the selenium2library based tests created at the last Plone Conference sprint which can be found `here <https://github.com/emanlove/buildout.coredev/tree/4.1-robot>`_.
+3. Create tests. Or better yet start of by copying the selenium2library based tests created at the last Plone Conference sprint which can be found `here <https://github.com/emanlove/buildout.coredev/tree/4.1-robot>`_.
 
 These test were placed in directory just below the buildout directory, called ./acceptance-tests. This choice has been made and copied be several Plone developers as a simple hack if you will.  Robot framework does not have a test discovery recipe as does Plone testing does with the eggs in Plone buildout.  Thus we have used this ease of use solution.  But it is temporary and we always welcome a better test discovery recipe.
 
-5. Run your tests
+4. Run your tests
 
 ::
 
@@ -289,12 +283,30 @@ Héctor Velarde (hvelarde)
 
     - https://github.com/hvelarde
 
+    - http://hvelarde.blogspot.com/
+
+.. Note to self: I wonder how mutli-ligual solutions might work to solve
+   the issue of test fagility/page object solutions and strings like
+   "We’re sorry, but there seems to be an error" which can be seen if you
+   traverse to http://plone.org/search_form
+
+Mikko Ohtama (moo-_-)
+    writing some selenium tests and base page objects for plone
+
 (Personal) Roadmap for Plone Selenium/Robot Framework Testing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Here is my personal list of To Do's for Plone Selenium/Robot Framework Testing
 
-    To Do: Make List ;)
+- work towards the 1.1 release of `robotframework-selenium2libary <https://github.com/rtomac/robotframework-selenium2library>`_
+- document, document document
+- work with datakurre on p.a.testing wrapper
+- work with hvelarde on multilingual robot
+- work on `PLIP11708 <https://dev.plone.org/ticket/11708>`_
+- work to standardize and create page objects for Plone
+- work with Matthew, Michelle and WebLion to create accessibility tests
+- work with Eric and Timo to get selenium/rf into Jenkins
+- ...
 
 
 Quick links
