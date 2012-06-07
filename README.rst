@@ -17,8 +17,8 @@ Table of Contents
 ~~~~~~~~~~~~~~~~~
 1. `Post-symposium follow-up`_
 
-   a) `Selenium RC and Selenium IDE`_
-   b) `Using both Python and Robot Framework`_
+   a. `Selenium RC and Selenium IDE`_
+   b. `Using both Python and Robot Framework`_
 
 2. `Steps to get started with Plone UI Testing using Robot Framework`_
 #. `Plone Testing, Javascript Statistics, QUnit`_
@@ -150,6 +150,11 @@ Selenium 1.0 or Selenium was basically a javascript library where as WebDriver/S
 
 Plone has had a few selenium test for a while. Selenium 2 / Webdriver versions can be found at https://github.com/plone/Products.CMFPlone/tree/selenium-integration/Products/CMFPlone/tests/selenium
 
+Other parts of Plone that have, very few at the moment, selenium tests:
+
+- ploe.app.deco  https://github.com/plone/plone.app.deco/tree/742150c5018c6bfd67cfb8c0c3f5c48be1aa32cf/plone/app/deco/tests/selenium
+
+- plone.app.jquerytools  (`'update-selenium-tests' branch <https://github.com/plone/plone.app.jquerytools/tree/update-selenium-tests/plone/app/jquerytools/tests/selenium>`_) (`'master' branch <https://github.com/plone/plone.app.jquerytools/tree/master/plone/app/jquerytools/tests/selenium>`_)
 
 Page Object Model
 ~~~~~~~~~~~~~~~~~
