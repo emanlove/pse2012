@@ -194,50 +194,40 @@ Plone's robot framework documentation can be found at https://github.com/gotcha/
 Using buildout and testing Plone core information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Steps to add robotframework and robotframework-selenium2library to buildout. Note these were written using Linux and should be adjusted accordingly to your OS. (Please send me any OS specific differences so I can add them here).
+The following steps add robotframework and robotframework-selenium2library to buildout. These were written using Linux and should be adjusted accordingly to your OS. (Please send me any OS specific differences so I can add them here). I have used `Buildout.coredev <https://github.com/plone/buildout.coredev/>`_ branches 4.1, 4.2, and 4.3 in the following steps for my testing setup. The goal is to easily demonstrate robot framework/selenium testing with Plone so any recommendations for better buildout configuration is welcomed.
 
-0. Note I have used `Buildout.coredev <https://github.com/plone/buildout.coredev/>`_ branches 4.1, 4.2, and 4.3 in the following steps for my testing setup. Also I have placed my eggs directly into core.cfg, checkouts.cfg, and sources.cfg which might not be best practices.  Right now I am working on easily demonstarting robot framework/selenium testing with Plone.  Any recommendations for better buildout configuration is welcomed.
-
-1. Add the following to ...
-
-core.cfg
+1. In the buildout directory create a file entitled, pybot.cfg, and place the following into that file,
 
 ::
 
     [buildout]
-    parts =
-        ...
+    
+    extends = buildout.cfg
+    
+    parts +=
         robot
     
+    allow-hosts +=
+        *.googlecode.com
+        code.google.com
+    
+    auto-checkout +=
+        robotframework-selenium2library
+    
+    [sources]
+    robotframework-selenium2library = git git@github.com:rtomac/robotframework-selenium2library
     
     [robot]
     recipe = zc.recipe.egg
     eggs = robotframework
            robotframework-selenium2library
-    entry-points = 
+           plone.act
+    entry-points =
         pybot=robot:run_cli
         rebot=robot.rebot:rebot_cli
     arguments = sys.argv[1:]
 
 The entry_points and arguments attributes are necessary because robotframework does not currently configure its scripts properly under buildout.  Thanks to Héctor Velarde and Mikko Ohtama for the complete solution. Godefroid also has presented an alternative solution `here <https://github.com/gotcha/robotentrypoints>`_.
-
-checkouts.cfg 
-
-::
-
-    auto-checkout =
-        ...
-        robotframework-selenium2library
-
-sources.cfg
-
-::
-
-    [sources]
-    ...
-    robotframework-selenium2library     = git git://github.com/emanlove/robotframework-selenium2library.git
-
-Note I am currently pulling in robotframework-selenium2library from my github repository for reasons of installation dependencies and this may change in the soon future (End of May 2012).
 
 2. Run buildout
 
@@ -245,14 +235,9 @@ Note I am currently pulling in robotframework-selenium2library from my github re
     
     ~/plone42$ ./bin/buildout
 
+3. Create tests. Or better yet start of by copying `my fork of the acceptance tests <https://github.com/emanlove/buildout.coredev/tree/4.1-robot/acceptance-tests>`_ created at the last Plone Conference sprint. The tests in my fork have been converted to use the newer Selenium 2 library.
 
-3. ~~In the buildout bin directory edit the script 'pybot'~~
-
-~~This is necessary because robotframework does not currently configure its scripts properly under buildout.  This is partially fixed by the entry_points attribute in core.cfg above.  By the script requires an argument (sys.argv[1:]) which is not allowed by entry_points or buildout.  So this poor workaround is required. Godefroid also has presented an alternative solution `here <https://github.com/gotcha/robotentrypoints>`_.~~
-
-3. Create tests. Or better yet start of by copying the selenium2library based tests created at the last Plone Conference sprint which can be found `here <https://github.com/emanlove/buildout.coredev/tree/4.1-robot>`_.
-
-These test were placed in directory just below the buildout directory, called ./acceptance-tests. This choice has been made and copied be several Plone developers as a simple hack if you will.  Robot framework does not have a test discovery recipe as does Plone testing does with the eggs in Plone buildout.  Thus we have used this ease of use solution.  But it is temporary and we always welcome a better test discovery recipe.
+These test were placed in directory just below the buildout directory, called ./acceptance-tests. This choice has been made and copied by several Plone developers as a simple hack if you will.  Robot framework does not have a test discovery recipe as does Plone testing.  Thus we have used this current solution and we always welcome a better test discovery recipe.
 
 4. Run your tests
 
