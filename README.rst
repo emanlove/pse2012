@@ -1,9 +1,4 @@
-README
-~~~~~~
-
-The following are resources, links and other notes relating to `my talk <http://www.justin.tv/weblionab/b/319303907>`_ given at the Plone East Symposium held at Penn State, May - 2012.
-
-If any information is missing or inaccurate please feel free to correct me.
+The following are resources, links and other notes relating to `my talk <http://www.justin.tv/weblionab/b/319303907>`_ given at the Plone East Symposium held at Penn State, May - 2012. If any information is missing or inaccurate please feel free to correct me.
 
 Ed Manlove
 
@@ -17,8 +12,9 @@ Table of Contents
 ~~~~~~~~~~~~~~~~~
 1. `Post-symposium follow-up`_
 
-   a. `Selenium RC and Selenium IDE`_
-   b. `Using both Python and Robot Framework`_
+   a. `Running Robot Framework with Plone's Testing Framework and Plone.App.Testing`_
+   b. `Selenium RC and Selenium IDE`_
+   c. `Using both Python and Robot Framework`_
 
 2. `Steps to get started with Plone UI Testing using Robot Framework`_
 #. `Plone Testing, Javascript Statistics, QUnit`_
@@ -34,6 +30,196 @@ Post-symposium follow-up
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 After my symposium talk I had several conversations with different people concerning a couple of topics.  I wanted to share some more information about those topics
+
+Running Robot Framework with Plone's Testing Framework and Plone.App.Testing
+----------------------------------------------------------------------------
+
+As noted in my talk, one of the drawbacks with robotframework is that the testing framework for robotframework is seperate from Plone's testing framework.  This means there is no utility keywords that provide the tester with convenient ... like... . Also you need to run the Plone instance in addition to running the robotframework test script. You can compare this to Plone's testing framework which provides both a single test script as well as a useful set of utilities. Thus it would be desirable to integrate both frameworks.
+
+There are essentially two ways of integrating the two frameworks; have robotframework encapsulate `plone.testing (http://pypi.python.org/pypi/plone.testing)`_ and `plone.app.testing (http://pypi.python.org/pypi/plone.app.testing/4.2)`_, which makes up the core of Plone's testing framework, or have plone.app.testing encapsulate robotframework. Both approaches have put forth by two members of the Plone community, Godefroid Chapelle (aka gotcha) and Asko Soukka (aka datakurre). 
+
+Asko has authored `robotsuite (https://github.com/datakurre/robotsuite)`_ which he describes as a "Python unittest test suite for Robot Framework". Here he is having plone.testing and plone.app.testing encapsulate or wrap robotframework.
+
+In comparison Godefroid is using robotframework to encapsulate plone.app.testing in his package `plone.act (https://github.com/gotcha/plone.act)`_.
+
+***ToDo*** Write more on these two approaches.
+
+***Note*** The following instructions are rough steps for getting started. I wanted to get this information out there sooner than later.  I will polish these steps as I and others use them more.
+
+Step by Step instructions for incorporating robotsuite
+......................................................
+
+Setup virtual environment and sandbox 
+
+::
+
+    # mkdir robotsuite
+    # cd robotsuite
+    # virtualenv -p /usr/bin/python2.6 --no-site-packages clean-python26-env
+    # git clone -b 4.3  https://github.com/plone/buildout.coredev ./p43
+    # source clean-python26-env/bin/activate
+
+
+Add configuration file pybot.cfg
+
+::
+
+    [buildout]
+    
+    extends = buildout.cfg
+    
+    parts +=
+        robot
+    
+    allow-hosts +=
+        *.googlecode.com
+        code.google.com
+    
+    auto-checkout +=
+        robotframework-selenium2library
+        robotsuite
+    
+    [sources]
+    robotframework-selenium2library = git git@github.com:rtomac/robotframework-selenium2library
+    robotsuite = git git@github.com:datakurre/robotsuite
+    [robot]
+    recipe = zc.recipe.egg
+    eggs = robotframework [test]
+           robotframework-selenium2library [test]
+           robotsuite
+    entry-points =
+        pybot=robot:run_cli
+        rebot=robot.rebot:rebot_cli
+    arguments = sys.argv[1:]
+
+
+Run buildout
+
+::
+
+    # cd p43/
+    # python bootstrap.py
+    # bin/buildout -c pybot.cfg
+
+
+Create test layer and unit test suite within ./src/Products.CMFPlone/Products/CMFPlone/tests/testPloneAcceptance.py
+
+::
+
+    import unittest2 as unittest
+    import time
+    
+    from plone.testing import layered
+    from robotsuite import RobotTestSuite
+    
+    from plone.testing import Layer
+    from plone.app.testing import PLONE_FIXTURE
+    from plone.app.testing import FunctionalTesting
+    from plone.testing import z2
+    
+    class RobotFrameworkLayer(Layer):
+        defaultBases = (z2.ZSERVER_FIXTURE, )
+    
+        def testSetUp(self):
+            pass
+    
+    ROBOT_FIXTURE = RobotFrameworkLayer()
+    ROBOT_PLONE_FUNCTIONAL_TESTING = FunctionalTesting(
+        bases=(ROBOT_FIXTURE, PLONE_FIXTURE),
+        name="RobotTesting:Functional")
+    ROBOT_TESTING = FunctionalTesting(
+        bases=(PLONE_FIXTURE, z2.ZSERVER_FIXTURE),
+        name="PloneFixture:Robot")
+    
+    
+    def test_suite():
+        suite = unittest.TestSuite()
+        suite.addTests([
+            layered(RobotTestSuite('acceptance-tests'),
+                    layer=ROBOT_PLONE_FUNCTIONAL_TESTING),
+        ])
+        return suite
+    
+    if __name__ == '__main__':
+        unittest.main(defaultTest='test_suite')
+
+
+Copy over acceptance tests from https://github.com/emanlove/buildout.coredev/tree/4.1-robot/acceptance-tests to ./src/Products.CMFPlone/Products/CMFPlone/tests/acceptance-tests
+***NOTE - VERY IMPORTANT*** plone.app.testing's PLONE_FIXTURE layer puts the site root at localhost:55001/plone as in lower-case 'p' plone. In addition to copying over the tests ***YOU NEED TO MODIFY*** the variable ${PLONE_URL} to ${ZOPE_URL}/plone (noting the lower case 'p') within ./src/Products.CMFPlone/Products/CMFPlone/tests/acceptance-tests/plone.txt. Otherwise when you run the tests you will see an error similar to 'Resource not found ... Resource: no default view (root default view was probably deleted)'. I'm not sure why Firefox is case sensitive and I will try to eliminate this step by pulling in this variable.
+
+Run tests
+
+::
+
+    # bin/test -s Products.CMFPlone -m testPloneAcceptance
+
+
+Step by Step instructions for incorporating plone.act
+.....................................................
+
+Setup virtual environment and sandbox 
+
+::
+
+    # mkdir act
+    # cd act
+    # virtualenv -p /usr/bin/python2.6 --no-site-packages clean-python26-env
+    # git clone -b 4.3  https://github.com/plone/buildout.coredev ./p43
+    # source clean-python26-env/bin/activate
+    # easy_install PIL
+
+Add configuration file pybot.cfg
+
+::
+
+    [buildout]
+    
+    extends = buildout.cfg
+    
+    parts +=
+        robot
+    
+    allow-hosts +=
+        *.googlecode.com
+        code.google.com
+    
+    auto-checkout +=
+        robotframework-selenium2library
+        plone.act
+    
+    [sources]
+    robotframework-selenium2library = git git@github.com:rtomac/robotframework-selenium2library
+    plone.act = git git@github.com:gotcha/plone.act
+    [robot]
+    recipe = zc.recipe.egg
+    eggs = robotframework
+           robotframework-selenium2library
+           plone.act
+    entry-points =
+        pybot=robot:run_cli
+        rebot=robot.rebot:rebot_cli
+    arguments = sys.argv[1:]
+
+Run buildout
+
+::
+
+    # cd p43/
+    # python bootstrap.py
+    # bin/buildout -c pybot.cfg
+
+plone.act configures the default port for the plone instance at 5000 so we adjust our environment accordingly
+
+::
+
+    # export ZSERVER_PORT=5000
+
+Run tests
+
+::
+
+    # ./bin/pybot src/plone.act/acceptance-tests/
+
 
 Selenium RC and Selenium IDE
 ----------------------------
